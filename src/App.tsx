@@ -87,8 +87,8 @@ export default function App() {
   const [isWinnerReleased, setIsWinnerReleased] = useState(false);
   const lastConfettiAtRef = useRef(0);
   const rouletteSizeClass = showSettings
-    ? 'relative w-full max-w-[450px]'
-    : 'relative w-full max-w-[820px]';
+    ? 'relative w-full max-w-[min(92vw,450px)] lg:max-w-[450px]'
+    : 'relative w-full max-w-[min(92vw,820px)] lg:max-w-[820px]';
   const activeForcedWinnerId = isWinnerReleased ? targetWinnerId : null;
   const activeBlockedWinnerId = !isWinnerReleased ? targetWinnerId : null;
 
@@ -188,19 +188,19 @@ export default function App() {
     <div className="min-h-screen text-white font-sans selection:bg-white/30">
       <Background theme={currentTheme} />
 
-      <main className="container mx-auto px-4 py-8 flex flex-col lg:flex-row gap-8 items-start justify-center min-h-screen">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 lg:py-8 flex flex-col lg:flex-row gap-4 sm:gap-6 lg:gap-8 items-stretch lg:items-start justify-center min-h-[100dvh]">
         
         {/* Left Panel: Management */}
         <motion.div 
           initial={{ opacity: 0, x: -50 }}
           animate={{ opacity: 1, x: 0 }}
-          className="w-full lg:w-1/3 bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-2xl"
+          className="order-2 lg:order-1 w-full lg:w-1/3 bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-5 lg:p-6 border border-white/20 shadow-2xl"
         >
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
+          <div className="flex items-center justify-between mb-4 sm:mb-6">
+            <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
               <Users className="w-6 h-6" />
               Participantes
-              <span className="text-sm font-normal opacity-60 ml-2">({participants.length})</span>
+              <span className="text-xs sm:text-sm font-normal opacity-60 ml-2">({participants.length})</span>
             </h2>
             <button 
               onClick={() => setShowSettings(!showSettings)}
@@ -210,24 +210,24 @@ export default function App() {
             </button>
           </div>
 
-          <div className="flex gap-2 mb-6">
+          <div className="flex gap-2 mb-4 sm:mb-6">
             <input
               type="text"
               value={newName}
               onChange={(e) => setNewName(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && addParticipant()}
               placeholder="Adicionar nome..."
-              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-4 py-3 focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
+              className="flex-1 bg-white/5 border border-white/10 rounded-xl px-3 sm:px-4 py-2.5 sm:py-3 text-sm sm:text-base focus:outline-none focus:ring-2 focus:ring-white/30 transition-all"
             />
             <button 
               onClick={addParticipant}
-              className="bg-white text-black p-3 rounded-xl hover:bg-opacity-90 transition-all active:scale-95"
+              className="bg-white text-black p-2.5 sm:p-3 rounded-xl hover:bg-opacity-90 transition-all active:scale-95"
             >
               <Plus className="w-6 h-6" />
             </button>
           </div>
 
-          <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2 custom-scrollbar">
+          <div className="space-y-2 max-h-[42vh] lg:max-h-[400px] overflow-y-auto pr-1 sm:pr-2 custom-scrollbar">
             <AnimatePresence mode="popLayout">
               {participants.map((p) => (
                 <motion.div
@@ -236,9 +236,9 @@ export default function App() {
                   animate={{ opacity: 1, scale: 1 }}
                   exit={{ opacity: 0, scale: 0.8 }}
                   layout
-                  className="flex items-center justify-between bg-white/5 p-3 rounded-xl border border-white/5 hover:border-white/20 transition-all group"
+                  className="flex items-center justify-between gap-2 min-w-0 bg-white/5 p-2.5 sm:p-3 rounded-xl border border-white/5 hover:border-white/20 transition-all group"
                 >
-                  <span className="font-medium">{p.name}</span>
+                  <span className="font-medium truncate pr-2">{p.name}</span>
                   <button 
                     onClick={() => removeParticipant(p.id)}
                     className="text-white/40 hover:text-red-400 p-1 transition-colors"
@@ -255,7 +255,7 @@ export default function App() {
         </motion.div>
 
         {/* Center Panel: Roulette */}
-        <div className="flex-1 w-full flex flex-col items-center justify-center gap-12 py-10">
+        <div className="order-1 lg:order-2 flex-1 w-full flex flex-col items-center justify-center gap-6 sm:gap-8 lg:gap-12 py-2 sm:py-4 lg:py-10">
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -279,13 +279,13 @@ export default function App() {
             onClick={handleSpin}
             disabled={participants.length < 2 || isSpinning}
             className={`
-              px-16 py-6 rounded-2xl text-2xl font-black uppercase tracking-widest shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all
+              px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-6 rounded-2xl text-lg sm:text-xl lg:text-2xl font-black uppercase tracking-[0.16em] sm:tracking-[0.2em] lg:tracking-widest shadow-[0_20px_50px_rgba(0,0,0,0.3)] transition-all
               ${isSpinning ? 'bg-white/10 cursor-not-allowed text-white/50' : 'bg-white text-black hover:shadow-white/10'}
             `}
           >
             {isSpinning ? (
-              <div className="flex items-center gap-4">
-                <RotateCw className="w-8 h-8 animate-spin" />
+              <div className="flex items-center gap-3 sm:gap-4">
+                <RotateCw className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 animate-spin" />
                 Girando...
               </div>
             ) : 'Sortear Agora'}
@@ -299,10 +299,10 @@ export default function App() {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               exit={{ opacity: 0, x: 50 }}
-              className="w-full lg:w-1/3 bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-2xl"
+              className="order-3 w-full lg:w-1/3 bg-white/10 backdrop-blur-xl rounded-2xl sm:rounded-3xl p-4 sm:p-5 lg:p-6 border border-white/20 shadow-2xl"
             >
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-2xl font-bold flex items-center gap-2">
+              <div className="flex items-center justify-between mb-4 sm:mb-6">
+                <h2 className="text-xl sm:text-2xl font-bold flex items-center gap-2">
                   <Settings className="w-6 h-6" />
                   Configurações
                 </h2>
@@ -311,10 +311,10 @@ export default function App() {
                 </button>
               </div>
 
-              <div className="space-y-6">
+              <div className="space-y-4 sm:space-y-6">
                 <div>
-                  <label className="text-sm font-bold uppercase tracking-wider opacity-60 mb-3 block">Temas</label>
-                  <div className="grid grid-cols-3 gap-2">
+                  <label className="text-xs sm:text-sm font-bold uppercase tracking-wider opacity-60 mb-3 block">Temas</label>
+                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                     {Object.values(THEMES).map((t) => (
                       <button
                         key={t.id}
@@ -331,7 +331,7 @@ export default function App() {
                 </div>
 
                 <div>
-                  <label className="text-sm font-bold uppercase tracking-wider opacity-60 mb-3 block">Estilos da Roleta</label>
+                  <label className="text-xs sm:text-sm font-bold uppercase tracking-wider opacity-60 mb-3 block">Estilos da Roleta</label>
                   <div className="grid grid-cols-2 gap-2">
                     {STYLE_OPTIONS.map((s) => (
                       <button
@@ -412,7 +412,7 @@ export default function App() {
                 : { duration: 0.35, ease: 'easeOut' }
             }
             className={`
-              fixed top-6 right-6 z-40 h-8 w-8 flex items-center justify-center rounded-full
+              fixed top-4 right-4 sm:top-6 sm:right-6 z-40 h-7 w-7 sm:h-8 sm:w-8 flex items-center justify-center rounded-full
               ${isSpinning ? 'opacity-60' : 'opacity-100'}
               cursor-default
             `}
@@ -433,28 +433,28 @@ export default function App() {
       {/* Victory Modal */}
       <AnimatePresence>
         {winner && (
-          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75">
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/75">
             <motion.div
               initial={{ scale: 0.5, opacity: 0, y: 100 }}
               animate={{ scale: 1, opacity: 1, y: 0 }}
               exit={{ scale: 0.5, opacity: 0, y: 100 }}
-              className="bg-white text-black rounded-[40px] p-10 max-w-md w-full text-center shadow-[0_0_50px_rgba(255,255,255,0.3)]"
+              className="bg-white text-black rounded-[28px] sm:rounded-[40px] p-6 sm:p-10 max-w-md w-full text-center shadow-[0_0_50px_rgba(255,255,255,0.3)]"
             >
               <motion.div
                 initial={{ rotate: -20, scale: 0 }}
                 animate={{ rotate: 0, scale: 1 }}
                 transition={{ delay: 0.2, type: 'spring' }}
-                className="w-24 h-24 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-6 shadow-lg"
+                className="w-20 h-20 sm:w-24 sm:h-24 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4 sm:mb-6 shadow-lg"
               >
-                <Trophy className="w-12 h-12 text-white" />
+                <Trophy className="w-10 h-10 sm:w-12 sm:h-12 text-white" />
               </motion.div>
               
-              <h3 className="text-xl font-bold opacity-60 uppercase tracking-widest mb-2">Temos um vencedor!</h3>
-              <h2 className="text-5xl font-black mb-8 break-words">{winner.name}</h2>
+              <h3 className="text-sm sm:text-xl font-bold opacity-60 uppercase tracking-widest mb-2">Temos um vencedor!</h3>
+              <h2 className="text-3xl sm:text-5xl font-black mb-6 sm:mb-8 break-words">{winner.name}</h2>
               
               <button
                 onClick={() => setWinner(null)}
-                className="w-full py-4 bg-black text-white rounded-2xl font-bold hover:scale-105 transition-transform active:scale-95"
+                className="w-full py-3 sm:py-4 bg-black text-white rounded-2xl font-bold hover:scale-105 transition-transform active:scale-95"
               >
                 Fechar e Continuar
               </button>
